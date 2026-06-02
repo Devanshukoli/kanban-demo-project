@@ -1,23 +1,31 @@
-import mongoose from 'mongoose'
+import mongoose, { Schema, model } from "mongoose";
 
-const userSchema = new mongoose.Schema(
+const userSchema = new Schema(
   {
+    name: {
+      type: String,
+      required: true
+    },
+
     email: {
       type: String,
       required: true,
       unique: true
     },
-    name: {
+
+    password: {
       type: String,
       required: true
     },
+
     role: {
       type: String,
       enum: ["ADMIN", "MANAGER", "MEMBER"],
       default: "MEMBER"
     },
+
     teamId: {
-      type: mongoose.Schema.Types.ObjectId,
+      type: Schema.Types.ObjectId,
       ref: "Team"
     }
   },
@@ -25,3 +33,7 @@ const userSchema = new mongoose.Schema(
     timestamps: true
   }
 );
+
+const User = mongoose.model("User", userSchema);
+
+export default User;
