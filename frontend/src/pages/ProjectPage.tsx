@@ -1,8 +1,18 @@
 import { useParams } from "react-router-dom";
+
 import { useQuery } from "@tanstack/react-query";
+
 import { getTasksByProject } from "@/api/task.api";
+
 import CreateTaskForm from "@/components/CreateTaskForm";
 import TaskCard from "@/components/TaskCard";
+
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 
 const ProjectPage = () => {
   const { id } = useParams();
@@ -14,7 +24,11 @@ const ProjectPage = () => {
   });
 
   if (tasksQuery.isLoading) {
-    return <p>Loading...</p>;
+    return (
+      <div className="p-6">
+        Loading...
+      </div>
+    );
   }
 
   const tasks =
@@ -40,59 +54,160 @@ const ProjectPage = () => {
     );
 
   return (
-    <div className="p-6">
+    <div className="max-w-7xl mx-auto p-6 space-y-8">
+
+      {/* Header */}
+
+      <div>
+        <h1 className="text-4xl font-bold">
+          Project Board
+        </h1>
+
+        <p className="text-muted-foreground mt-2">
+          Manage and track your tasks
+        </p>
+      </div>
+
+      {/* Stats */}
+
+      <div className="grid md:grid-cols-3 gap-4">
+        <Card>
+          <CardHeader>
+            <CardTitle>
+              TODO
+            </CardTitle>
+          </CardHeader>
+
+          <CardContent>
+            <p className="text-3xl font-bold">
+              {todoTasks.length}
+            </p>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader>
+            <CardTitle>
+              IN PROGRESS
+            </CardTitle>
+          </CardHeader>
+
+          <CardContent>
+            <p className="text-3xl font-bold">
+              {inProgressTasks.length}
+            </p>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader>
+            <CardTitle>
+              DONE
+            </CardTitle>
+          </CardHeader>
+
+          <CardContent>
+            <p className="text-3xl font-bold">
+              {doneTasks.length}
+            </p>
+          </CardContent>
+        </Card>
+      </div>
+
+      {/* Create Task */}
+
       <CreateTaskForm
         projectId={id!}
       />
 
-      <div className="grid grid-cols-3 gap-6 mt-8">
-        <div>
-          <h2 className="font-bold text-xl mb-4">
-            TODO
-          </h2>
+      {/* Kanban Board */}
 
-          {todoTasks.map(
-            (task: any) => (
-              <TaskCard
-                key={task._id}
-                task={task}
-                projectId={id!}
-              />
-            )
-          )}
-        </div>
+      <div className="grid md:grid-cols-3 gap-6">
 
-        <div>
-          <h2 className="font-bold text-xl mb-4">
-            IN PROGRESS
-          </h2>
+        {/* TODO */}
 
-          {inProgressTasks.map(
-            (task: any) => (
-              <TaskCard
-                key={task._id}
-                task={task}
-                projectId={id!}
-              />
-            )
-          )}
-        </div>
+        <Card>
+          <CardHeader>
+            <CardTitle>
+              📝 TODO ({todoTasks.length})
+            </CardTitle>
+          </CardHeader>
 
-        <div>
-          <h2 className="font-bold text-xl mb-4">
-            DONE
-          </h2>
+          <CardContent className="space-y-3">
+            {todoTasks.length === 0 ? (
+              <p className="text-muted-foreground">
+                No tasks
+              </p>
+            ) : (
+              todoTasks.map(
+                (task: any) => (
+                  <TaskCard
+                    key={task._id}
+                    task={task}
+                    projectId={id!}
+                  />
+                )
+              )
+            )}
+          </CardContent>
+        </Card>
 
-          {doneTasks.map(
-            (task: any) => (
-              <TaskCard
-                key={task._id}
-                task={task}
-                projectId={id!}
-              />
-            )
-          )}
-        </div>
+        {/* IN PROGRESS */}
+
+        <Card>
+          <CardHeader>
+            <CardTitle>
+              🚧 IN PROGRESS (
+              {inProgressTasks.length})
+            </CardTitle>
+          </CardHeader>
+
+          <CardContent className="space-y-3">
+            {inProgressTasks.length === 0 ? (
+              <p className="text-muted-foreground">
+                No tasks
+              </p>
+            ) : (
+              inProgressTasks.map(
+                (task: any) => (
+                  <TaskCard
+                    key={task._id}
+                    task={task}
+                    projectId={id!}
+                  />
+                )
+              )
+            )}
+          </CardContent>
+        </Card>
+
+        {/* DONE */}
+
+        <Card>
+          <CardHeader>
+            <CardTitle>
+              ✅ DONE ({doneTasks.length})
+            </CardTitle>
+          </CardHeader>
+
+          <CardContent className="space-y-3">
+            {doneTasks.length === 0 ? (
+              <p className="text-muted-foreground">
+                No tasks
+              </p>
+            ) : (
+              doneTasks.map(
+                (task: any) => (
+                  <TaskCard
+                    key={task._id}
+                    task={task}
+                    projectId={id!}
+                  />
+                )
+              )
+            )}
+          </CardContent>
+        </Card>
       </div>
     </div>
   );
