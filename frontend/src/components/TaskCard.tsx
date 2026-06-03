@@ -1,68 +1,62 @@
-import {
-  useMutation,
-  useQueryClient,
-} from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 
-import {
-  updateTask,
-  deleteTask,
-} from "@/api/task.api";
+import { updateTask, deleteTask } from "@/api/task.api";
+import { useState } from "react";
+import EditTaskForm from "./EditTaskForm";
 
 type Props = {
   task: any;
   projectId: string;
 };
 
-const TaskCard = ({
-  task,
-  projectId,
-}: Props) => {
-  const queryClient =
-    useQueryClient();
+const TaskCard = ({ task, projectId }: Props) => {
+  const [editing, setEditing] = useState(false);
 
-  const updateMutation =
-    useMutation({
-      mutationFn: updateTask,
+  const queryClient = useQueryClient();
 
-      onSuccess: () => {
-        queryClient.invalidateQueries({
-          queryKey: [
-            "tasks",
-            projectId,
-          ],
-        });
-      },
-    });
+  const updateMutation = useMutation({
+    mutationFn: updateTask,
 
-  const deleteMutation =
-    useMutation({
-      mutationFn: deleteTask,
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ["tasks", projectId],
+      });
+    },
+  });
 
-      onSuccess: () => {
-        queryClient.invalidateQueries({
-          queryKey: [
-            "tasks",
-            projectId,
-          ],
-        });
-      },
-    });
+  const deleteMutation = useMutation({
+    mutationFn: deleteTask,
+
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ["tasks", projectId],
+      });
+    },
+  });
+
+  if (editing) {
+    return (
+      <EditTaskForm
+        task={task}
+        projectId={projectId}
+        onClose={() => setEditing(false)}
+      />
+    );
+  }
 
   return (
     <div className="border p-3 rounded mb-2 space-y-2">
-      <h3 className="font-semibold">
-        {task.title}
-      </h3>
+      <h3 className="font-semibold">{task.title}</h3>
 
-      <p className="text-sm">
-        {task.description}
-      </p>
+      <p className="text-sm">{task.description}</p>
 
-      <p className="text-xs">
-        Priority: {task.priority}
-      </p>
+      <p className="text-xs">Priority: {task.priority}</p>
 
-      <div className="flex gap-2 flex-wrap">
+      <div className="flex gap-2 flex-wrap ">
+        <button className="border px-2 py-1" onClick={() => setEditing(true)}>
+          Edit
+        </button>
+
         {task.status !== "TODO" && (
           <button
             className="border px-2 py-1"
@@ -79,16 +73,14 @@ const TaskCard = ({
           </button>
         )}
 
-        {task.status !==
-          "IN_PROGRESS" && (
+        {task.status !== "IN_PROGRESS" && (
           <button
             className="border px-2 py-1"
             onClick={() =>
               updateMutation.mutate({
                 taskId: task._id,
                 data: {
-                  status:
-                    "IN_PROGRESS",
+                  status: "IN_PROGRESS",
                 },
               })
             }
@@ -115,11 +107,7 @@ const TaskCard = ({
 
         <button
           className="border px-2 py-1"
-          onClick={() =>
-            deleteMutation.mutate(
-              task._id
-            )
-          }
+          onClick={() => deleteMutation.mutate(task._id)}
         >
           Delete
         </button>
