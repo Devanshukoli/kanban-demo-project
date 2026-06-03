@@ -1,10 +1,8 @@
 import { useParams } from "react-router-dom";
-
 import { useQuery } from "@tanstack/react-query";
-
 import { getTasksByProject } from "@/api/task.api";
-
 import CreateTaskForm from "@/components/CreateTaskForm";
+import TaskCard from "@/components/TaskCard";
 
 const ProjectPage = () => {
   const { id } = useParams();
@@ -55,14 +53,11 @@ const ProjectPage = () => {
 
           {todoTasks.map(
             (task: any) => (
-              <div
+              <TaskCard
                 key={task._id}
-                className="border p-3 rounded mb-2"
-              >
-                <h3>
-                  {task.title}
-                </h3>
-              </div>
+                task={task}
+                projectId={id!}
+              />
             )
           )}
         </div>
@@ -74,14 +69,11 @@ const ProjectPage = () => {
 
           {inProgressTasks.map(
             (task: any) => (
-              <div
+              <TaskCard
                 key={task._id}
-                className="border p-3 rounded mb-2"
-              >
-                <h3>
-                  {task.title}
-                </h3>
-              </div>
+                task={task}
+                projectId={id!}
+              />
             )
           )}
         </div>
@@ -93,14 +85,11 @@ const ProjectPage = () => {
 
           {doneTasks.map(
             (task: any) => (
-              <div
+              <TaskCard
                 key={task._id}
-                className="border p-3 rounded mb-2"
-              >
-                <h3>
-                  {task.title}
-                </h3>
-              </div>
+                task={task}
+                projectId={id!}
+              />
             )
           )}
         </div>
