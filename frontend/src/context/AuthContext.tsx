@@ -19,13 +19,21 @@ export const AuthProvider = ({
 }: {
   children: React.ReactNode;
 }) => {
-  const [user, setUser] =
-    useState<User | null>(null);
+  const storedUser =
+  localStorage.getItem("user");
 
+  const [user, setUser] =
+  useState<User | null>(
+    storedUser
+      ? JSON.parse(storedUser)
+      : null
+  );
   const [token, setToken] =
     useState<string | null>(
       localStorage.getItem("token")
     );
+
+
 
   const login = (
     token: string,
@@ -36,12 +44,18 @@ export const AuthProvider = ({
       token
     );
 
+    localStorage.setItem(
+      "user",
+      JSON.stringify(user)
+    );
+
     setToken(token);
     setUser(user);
   };
 
   const logout = () => {
     localStorage.removeItem("token");
+    localStorage.removeItem("user");
 
     setToken(null);
     setUser(null);

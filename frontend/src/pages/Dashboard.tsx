@@ -1,5 +1,15 @@
+import { useAuth } from "@/context/AuthContext";
+
 const Dashboard = () => {
-  return <h1>Dashboard</h1>;
+  const { user } = useAuth();
+
+  return (
+    <div>
+      <h1>
+        Welcome {user?.name}
+      </h1>
+    </div>
+  );
 };
 
 export default Dashboard;
