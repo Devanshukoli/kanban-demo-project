@@ -9,12 +9,14 @@ import {
   updateTask,
   deleteTask,
 } from "../controllers/task.controller.js";
+import validate from "../middlewares/validate.middleware.js";
+import { createTaskSchema, updateTaskSchema } from "../validations/task.validation.js";
 
 const router = express.Router();
 
 router.use(protect);
 
-router.post("/", createTask);
+router.post("/", validate(createTaskSchema), createTask);
 
 router.get(
   "/project/:projectId",
@@ -23,7 +25,7 @@ router.get(
 
 router.get("/:id", getTaskById);
 
-router.patch("/:id", updateTask);
+router.patch("/:id", validate(updateTaskSchema), updateTask);
 
 router.delete("/:id", deleteTask);
 

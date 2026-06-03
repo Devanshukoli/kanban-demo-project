@@ -7,13 +7,17 @@ import {
   getTeamById,
   getMyTeam,
 } from "../controllers/team.controller.js";
+import validate from "../middlewares/validate.middleware.js";
+import { createTeamSchema } from "../validations/team.validation.js";
 
 const router = express.Router();
 
-router.post("/", protect, createTeam);
+router.use(protect);
 
-router.get("/my-team", protect, getMyTeam);
+router.post("/", validate(createTeamSchema), createTeam);
 
-router.get("/:id", protect, getTeamById);
+router.get("/my-team",  getMyTeam);
+
+router.get("/:id", getTeamById);
 
 export default router;

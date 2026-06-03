@@ -9,13 +9,15 @@ import {
   updateProject,
   deleteProject,
 } from "../controllers/project.controller.js";
+import validate from "../middlewares/validate.middleware.js";
+import { createProjectSchema } from "../validations/project.validation.js";
 
 const router = express.Router();
 
 router.use(protect);
 
 router.route("/")
-  .post(isAdminOrManager, createProject)
+  .post(isAdminOrManager, validate(createProjectSchema), createProject)
   .get(getProjects);
 
 router.route("/:id")
