@@ -1,5 +1,12 @@
 import { useNavigate } from "react-router-dom";
 
+import {
+  Card,
+  CardContent,
+} from "@/components/ui/card";
+
+import { Button } from "@/components/ui/button";
+
 type Project = {
   _id: string;
   name: string;
@@ -17,25 +24,40 @@ const ProjectList = ({
     useNavigate();
 
   return (
-    <div className="space-y-3">
+    <div className="grid gap-4">
       {projects.map((project) => (
-        <div
+        <Card
           key={project._id}
-          className="border p-4 rounded cursor-pointer"
-          onClick={() =>
-            navigate(
-              `/project/${project._id}`
-            )
-          }
+          className="
+            cursor-pointer
+            transition-all
+            hover:shadow-lg
+            hover:-translate-y-1
+          "
         >
-          <h3 className="font-bold">
-            {project.name}
-          </h3>
+          <CardContent className="space-y-4">
+            <div>
+              <h3 className="text-xl font-semibold">
+                📁 {project.name}
+              </h3>
 
-          <p>
-            {project.description}
-          </p>
-        </div>
+              <p className="text-muted-foreground mt-2">
+                {project.description}
+              </p>
+            </div>
+
+            <Button
+              onClick={() =>
+                navigate(
+                  `/project/${project._id}`
+                )
+              }
+              className="w-full"
+            >
+              Open Project →
+            </Button>
+          </CardContent>
+        </Card>
       ))}
     </div>
   );

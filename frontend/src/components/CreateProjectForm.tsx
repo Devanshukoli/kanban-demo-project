@@ -7,6 +7,19 @@ import {
 
 import { createProject } from "@/api/project.api";
 
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+
+import { Button } from "@/components/ui/button";
+
+import { Input } from "@/components/ui/input";
+
+import { Textarea } from "@/components/ui/textarea";
+
 const CreateProjectForm = () => {
   const queryClient =
     useQueryClient();
@@ -42,41 +55,60 @@ const CreateProjectForm = () => {
   };
 
   return (
-    <form
-      onSubmit={handleSubmit}
-      className="border p-4 rounded space-y-4"
-    >
-      <h2 className="font-bold">
-        Create Project
-      </h2>
+    <Card>
+      <CardHeader>
+        <CardTitle>
+          Create New Project
+        </CardTitle>
+      </CardHeader>
 
-      <input
-        className="border p-2 w-full"
-        placeholder="Project Name"
-        value={name}
-        onChange={(e) =>
-          setName(e.target.value)
-        }
-      />
+      <CardContent>
+        <form
+          onSubmit={handleSubmit}
+          className="space-y-4"
+        >
+          <div className="space-y-2">
+            <label className="text-sm font-medium">
+              Project Name
+            </label>
 
-      <input
-        className="border p-2 w-full"
-        placeholder="Description"
-        value={description}
-        onChange={(e) =>
-          setDescription(
-            e.target.value
-          )
-        }
-      />
+            <Input
+              placeholder="Kanban Backend"
+              value={name}
+              onChange={(e) =>
+                setName(e.target.value)
+              }
+            />
+          </div>
 
-      <button
-        type="submit"
-        className="border px-4 py-2"
-      >
-        Create
-      </button>
-    </form>
+          <div className="space-y-2">
+            <label className="text-sm font-medium">
+              Description
+            </label>
+
+            <Textarea
+              placeholder="Project description..."
+              value={description}
+              onChange={(e) =>
+                setDescription(
+                  e.target.value
+                )
+              }
+            />
+          </div>
+
+          <Button
+            type="submit"
+            disabled={mutation.isPending}
+            className="w-full"
+          >
+            {mutation.isPending
+              ? "Creating..."
+              : "Create Project"}
+          </Button>
+        </form>
+      </CardContent>
+    </Card>
   );
 };
 
