@@ -57,16 +57,17 @@ export const getTeamById = async (req, res) => {
 // todo: confirm if this endpoint fetch every team that is created by user.
 export const getMyTeam = async (req, res) => {
   try {
-    // const user = await User.findById(req.user._id);
+    const user = await User.findById(req.user._id);
 
-    // if (!user.teamId) {
-    //   return res.status(404).json({
-    //     success: false,
-    //     message: "User not assigned to any team",
-    //   });
-    // }
+    if (!user.teamId) {
+      return res.status(404).json({
+        success: false,
+        message: "User not assigned to any team",
+      });
+    }
 
-    const team = await Team.find({ adminId: req.user._id });
+    // const team = await Team.find({ adminId: req.user._id });
+    const team = await Team.find(user.teamId);
 
     res.json({
       success: true,
