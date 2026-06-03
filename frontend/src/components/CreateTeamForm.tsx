@@ -1,13 +1,32 @@
 import { useState } from "react";
 
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import {
+  useMutation,
+  useQueryClient,
+} from "@tanstack/react-query";
 
 import { createTeam } from "@/api/team.api";
 
-const CreateTeamForm = () => {
-  const queryClient = useQueryClient();
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 
-  const [name, setName] = useState("");
+import { Button } from "@/components/ui/button";
+
+import { Input } from "@/components/ui/input";
+
+import { Textarea } from "@/components/ui/textarea";
+
+const CreateTeamForm = () => {
+  const queryClient =
+    useQueryClient();
+
+  const [name, setName] =
+    useState("");
+
   const [description, setDescription] =
     useState("");
 
@@ -36,41 +55,60 @@ const CreateTeamForm = () => {
   };
 
   return (
-    <form
-      onSubmit={handleSubmit}
-      className="space-y-4 border p-4 rounded"
-    >
-      <h2 className="text-xl font-bold">
-        Create Team
-      </h2>
+    <Card>
+      <CardHeader>
+        <CardTitle>
+          Create Team
+        </CardTitle>
+      </CardHeader>
 
-      <input
-        className="border p-2 w-full"
-        value={name}
-        onChange={(e) =>
-          setName(e.target.value)
-        }
-        placeholder="Team Name"
-      />
+      <CardContent>
+        <form
+          onSubmit={handleSubmit}
+          className="space-y-4"
+        >
+          <div className="space-y-2">
+            <label className="text-sm font-medium">
+              Team Name
+            </label>
 
-      <input
-        className="border p-2 w-full"
-        value={description}
-        onChange={(e) =>
-          setDescription(
-            e.target.value
-          )
-        }
-        placeholder="Description"
-      />
+            <Input
+              placeholder="Fast Sale Team"
+              value={name}
+              onChange={(e) =>
+                setName(e.target.value)
+              }
+            />
+          </div>
 
-      <button
-        className="border px-4 py-2"
-        type="submit"
-      >
-        Create Team
-      </button>
-    </form>
+          <div className="space-y-2">
+            <label className="text-sm font-medium">
+              Description
+            </label>
+
+            <Textarea
+              placeholder="Describe your team..."
+              value={description}
+              onChange={(e) =>
+                setDescription(
+                  e.target.value
+                )
+              }
+            />
+          </div>
+
+          <Button
+            type="submit"
+            disabled={mutation.isPending}
+            className="w-full"
+          >
+            {mutation.isPending
+              ? "Creating..."
+              : "Create Team"}
+          </Button>
+        </form>
+      </CardContent>
+    </Card>
   );
 };
 
