@@ -4,20 +4,26 @@ const teamSchema = new mongoose.Schema(
   {
     name: {
       type: String,
-      required: true
+      required: true,
+      trim: true,
     },
 
     description: {
       type: String,
-      required: true
+      default: "",
     },
 
     adminId: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "User"
-    }
+      ref: "User",
+      required: true,
+    },
   },
   {
-    timestamps: true
+    timestamps: true,
   }
 );
+
+const Team = mongoose.model("Team", teamSchema);
+
+export default Team;
