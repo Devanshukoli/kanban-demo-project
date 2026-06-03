@@ -7,6 +7,19 @@ import {
 
 import { updateTask } from "@/api/task.api";
 
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+
+import { Button } from "@/components/ui/button";
+
+import { Input } from "@/components/ui/input";
+
+import { Textarea } from "@/components/ui/textarea";
+
 type Props = {
   task: any;
   projectId: string;
@@ -63,57 +76,107 @@ const EditTaskForm = ({
   };
 
   return (
-    <form
-      onSubmit={handleSubmit}
-      className="border p-4 rounded space-y-4"
-    >
-      <input
-        value={title}
-        onChange={(e) =>
-          setTitle(e.target.value)
-        }
-        className="border p-2 w-full"
-      />
+    <Card>
+      <CardHeader>
+        <CardTitle>
+          Edit Task
+        </CardTitle>
+      </CardHeader>
 
-      <textarea
-        value={description}
-        onChange={(e) =>
-          setDescription(
-            e.target.value
-          )
-        }
-        className="border p-2 w-full"
-      />
+      <CardContent>
+        <form
+          onSubmit={handleSubmit}
+          className="space-y-4"
+        >
+          <div className="space-y-2">
+            <label className="text-sm font-medium">
+              Title
+            </label>
 
-      <select
-        value={priority}
-        onChange={(e) =>
-          setPriority(
-            e.target.value
-          )
-        }
-        className="border p-2 w-full"
-      >
-        <option value="LOW">
-          LOW
-        </option>
+            <Input
+              value={title}
+              onChange={(e) =>
+                setTitle(
+                  e.target.value
+                )
+              }
+            />
+          </div>
 
-        <option value="MEDIUM">
-          MEDIUM
-        </option>
+          <div className="space-y-2">
+            <label className="text-sm font-medium">
+              Description
+            </label>
 
-        <option value="HIGH">
-          HIGH
-        </option>
-      </select>
+            <Textarea
+              value={description}
+              onChange={(e) =>
+                setDescription(
+                  e.target.value
+                )
+              }
+            />
+          </div>
 
-      <button
-        type="submit"
-        className="border px-4 py-2"
-      >
-        Save
-      </button>
-    </form>
+          <div className="space-y-2">
+            <label className="text-sm font-medium">
+              Priority
+            </label>
+
+            <select
+              value={priority}
+              onChange={(e) =>
+                setPriority(
+                  e.target.value
+                )
+              }
+              className="
+                w-full
+                rounded-lg
+                border
+                border-input
+                bg-background
+                px-3
+                py-2
+              "
+            >
+              <option value="LOW">
+                LOW
+              </option>
+
+              <option value="MEDIUM">
+                MEDIUM
+              </option>
+
+              <option value="HIGH">
+                HIGH
+              </option>
+            </select>
+          </div>
+
+          <div className="flex gap-2">
+            <Button
+              type="submit"
+              disabled={
+                mutation.isPending
+              }
+            >
+              {mutation.isPending
+                ? "Saving..."
+                : "Save Changes"}
+            </Button>
+
+            <Button
+              type="button"
+              variant="outline"
+              onClick={onClose}
+            >
+              Cancel
+            </Button>
+          </div>
+        </form>
+      </CardContent>
+    </Card>
   );
 };
 
