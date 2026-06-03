@@ -1,7 +1,7 @@
 import express from "express";
-
 import protect from "../middlewares/auth.middleware.js";
-
+import isAdmin from "../middlewares/isAdmin.middleware.js";
+import isAdminOrManager from "../middlewares/isAdminOrManager.middleware.js";
 import {
   createProject,
   getProjects,
@@ -15,12 +15,12 @@ const router = express.Router();
 router.use(protect);
 
 router.route("/")
-  .post(createProject)
+  .post(isAdminOrManager, createProject)
   .get(getProjects);
 
 router.route("/:id")
   .get(getProjectById)
-  .patch(updateProject)
-  .delete(deleteProject);
+  .patch(isAdminOrManager, updateProject)
+  .delete(isAdmin, deleteProject);
 
 export default router;
