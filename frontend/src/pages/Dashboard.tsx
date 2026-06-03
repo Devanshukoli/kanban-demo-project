@@ -6,6 +6,8 @@ import { getMyTeam } from "@/api/team.api";
 import { getProjects } from "@/api/project.api";
 
 import CreateTeamForm from "@/components/CreateTeamForm";
+import CreateProjectForm from "@/components/CreateProjectForm";
+import ProjectList from "@/components/ProjectList";
 
 const Dashboard = () => {
   const { user } = useAuth();
@@ -20,46 +22,69 @@ const Dashboard = () => {
     queryFn: getProjects,
   });
 
-  if (teamQuery.isLoading) {
-    return <p>Loading...</p>;
+  if (teamQuery.isLoading || projectsQuery.isLoading) {
+    return (
+      <div className="p-6">
+        <p>Loading...</p>
+      </div>
+    );
   }
 
-  return (
-    <div className="p-6 space-y-6">
-      <h1 className="text-3xl font-bold">
-        Welcome {user?.name}
-      </h1>
+  const team = teamQuery.data?.team ?? [];
+  const projects =
+    projectsQuery.data?.projects ?? [];
 
-      {!teamQuery.data?.team?.length ? (
+  return (
+    <div className="max-w-5xl mx-auto p-6 space-y-8">
+      <div>
+        <h1 className="text-3xl font-bold">
+          Welcome {user?.name}
+        </h1>
+
+        <p className="text-gray-500">
+          Manage your team and projects
+        </p>
+      </div>
+
+      {team.length === 0 ? (
         <CreateTeamForm />
       ) : (
         <>
-          <div className="border p-4 rounded">
-            <h2 className="text-xl font-bold">
-              Team
+          <div className="border rounded-lg p-6">
+            <h2 className="text-xl font-semibold mb-4">
+              Team Information
             </h2>
 
-            <pre>
-              {JSON.stringify(
-                teamQuery.data.team,
-                null,
-                2
-              )}
-            </pre>
+            <div className="space-y-2">
+              <p>
+                <strong>Name:</strong>{" "}
+                {team[0].name}
+              </p>
+
+              <p>
+                <strong>Description:</strong>{" "}
+                {team[0].description}
+              </p>
+            </div>
           </div>
 
-          <div className="border p-4 rounded">
-            <h2 className="text-xl font-bold">
+          <CreateProjectForm />
+
+          <div className="border rounded-lg p-6">
+            <h2 className="text-xl font-semibold mb-4">
               Projects
             </h2>
 
-            <pre>
-              {JSON.stringify(
-                projectsQuery.data,
-                null,
-                2
-              )}
-            </pre>
+            {projects.length === 0 ? (
+              <p className="text-gray-500">
+                No projects yet. Create your
+                first project.
+              </p>
+            ) : (
+              <ProjectList
+                projects={projects}
+              />
+            )}
           </div>
         </>
       )}
