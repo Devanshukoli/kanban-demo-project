@@ -1,9 +1,11 @@
 import ReactDOM from "react-dom/client";
 
 import App from "./App";
+import './styles/globals.css';
 import './index.css';
 
 import { AuthProvider } from "./context/AuthContext";
+import { ThemeProvider } from "./context/ThemeContext";
 
 import {
   QueryClient,
@@ -17,7 +19,9 @@ ReactDOM.createRoot(
 ).render(
   <QueryClientProvider client={queryClient}>
     <AuthProvider>
-      <App />
+      <ThemeProvider>
+        <App />
+      </ThemeProvider>
     </AuthProvider>
   </QueryClientProvider>
 );

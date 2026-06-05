@@ -6,6 +6,7 @@ import { useAuth } from "@/context/AuthContext";
 import { getMyTeam } from "@/api/team.api";
 import { getProjects } from "@/api/project.api";
 
+import ThemeToggle from "@/components/ThemeToggle";
 import CreateTeamForm from "@/components/CreateTeamForm";
 import CreateProjectForm from "@/components/CreateProjectForm";
 import ProjectList from "@/components/ProjectList";
@@ -69,15 +70,18 @@ const Dashboard = () => {
           </p>
         </div>
 
-        <Button
-          variant="outline"
-          onClick={() => {
-            logout();
-            navigate("/");
-          }}
-        >
-          Logout
-        </Button>
+        <div className="flex items-center gap-3">
+          <ThemeToggle />
+          <Button
+            variant="outline"
+            onClick={() => {
+              logout();
+              navigate("/");
+            }}
+          >
+            Logout
+          </Button>
+        </div>
       </div>
 
       {/* Team Not Created */}
