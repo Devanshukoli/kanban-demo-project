@@ -10,7 +10,12 @@ import {
   deleteTask,
 } from "../controllers/task.controller.js";
 import validate from "../middlewares/validate.middleware.js";
-import { createTaskSchema, updateTaskSchema } from "../validations/task.validation.js";
+import {
+  createTaskSchema,
+  updateTaskSchema,
+  idParamSchema,
+  projectIdParamSchema,
+} from "../validations/task.validation.js";
 
 const router = express.Router();
 
@@ -20,13 +25,18 @@ router.post("/", validate(createTaskSchema), createTask);
 
 router.get(
   "/project/:projectId",
+  validate({ params: projectIdParamSchema }),
   getTasksByProject
 );
 
-router.get("/:id", getTaskById);
+router.get("/:id", validate({ params: idParamSchema }), getTaskById);
 
-router.patch("/:id", validate(updateTaskSchema), updateTask);
+router.patch(
+  "/:id",
+  validate({ params: idParamSchema, body: updateTaskSchema }),
+  updateTask
+);
 
-router.delete("/:id", deleteTask);
+router.delete("/:id", validate({ params: idParamSchema }), deleteTask);
 
 export default router;

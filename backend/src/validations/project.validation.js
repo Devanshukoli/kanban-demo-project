@@ -1,12 +1,30 @@
 import Joi from "joi";
 
-export const createProjectSchema =
-  Joi.object({
-    name: Joi.string()
-      .min(3)
-      .max(100)
-      .required(),
+const objectId = Joi.string().hex().length(24);
 
-    description: Joi.string()
-      .allow(""),
-  });
+export const idParamSchema = Joi.object({
+  id: objectId.required().messages({
+    "string.hex": "Invalid ID format",
+    "string.length": "ID must be 24 characters long",
+    "any.required": "ID is required",
+  }),
+});
+
+export const createProjectSchema = Joi.object({
+  name: Joi.string()
+    .min(3)
+    .max(100)
+    .required(),
+
+  description: Joi.string()
+    .allow(""),
+});
+
+export const updateProjectSchema = Joi.object({
+  name: Joi.string()
+    .min(3)
+    .max(100),
+
+  description: Joi.string()
+    .allow(""),
+}).min(1);

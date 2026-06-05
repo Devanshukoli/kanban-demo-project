@@ -1,17 +1,27 @@
-const validate = (schema) => {
+const validate = (schemas) => {
   return (req, res, next) => {
-    const { error } = schema.validate(req.body, {
-      abortEarly: false,
-      stripUnknown: true,
-    });
+    const targetSchemas = typeof schemas?.validate === "function"
+      ? { body: schemas }
+      : schemas;
 
-    if (error) {
-      return res.status(400).json({
-        success: false,
-        errors: error.details.map(
-          (detail) => detail.message
-        ),
-      });
+    for (const key of ["body", "params", "query"]) {
+      if (targetSchemas[key]) {
+        const { error, value } = targetSchemas[key].validate(req[key], {
+          abortEarly: false,
+          stripUnknown: true,
+        });
+
+        if (error) {
+          return res.status(400).json({
+            success: false,
+            errors: error.details.map(
+              (detail) => detail.message
+            ),
+          });
+        }
+
+        req[key] = value;
+      }
     }
 
     next();

@@ -66,8 +66,7 @@ export const getMyTeam = async (req, res) => {
       });
     }
 
-    // const team = await Team.find({ adminId: req.user._id });
-    const team = await Team.find(user.teamId);
+    const team = await Team.find({ _id: user.teamId });
 
     res.json({
       success: true,

@@ -10,7 +10,11 @@ import {
   deleteProject,
 } from "../controllers/project.controller.js";
 import validate from "../middlewares/validate.middleware.js";
-import { createProjectSchema } from "../validations/project.validation.js";
+import {
+  createProjectSchema,
+  updateProjectSchema,
+  idParamSchema,
+} from "../validations/project.validation.js";
 
 const router = express.Router();
 
@@ -21,8 +25,12 @@ router.route("/")
   .get(getProjects);
 
 router.route("/:id")
-  .get(getProjectById)
-  .patch(isAdminOrManager, updateProject)
-  .delete(isAdmin, deleteProject);
+  .get(validate({ params: idParamSchema }), getProjectById)
+  .patch(
+    isAdminOrManager,
+    validate({ params: idParamSchema, body: updateProjectSchema }),
+    updateProject
+  )
+  .delete(isAdmin, validate({ params: idParamSchema }), deleteProject);
 
 export default router;

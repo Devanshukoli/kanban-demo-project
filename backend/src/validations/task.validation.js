@@ -1,51 +1,55 @@
 import Joi from "joi";
 
-export const createTaskSchema =
-  Joi.object({
-    title: Joi.string()
-      .required(),
+const objectId = Joi.string().hex().length(24);
 
-    description: Joi.string()
-      .allow(""),
+export const idParamSchema = Joi.object({
+  id: objectId.required().messages({
+    "string.hex": "Invalid ID format",
+    "string.length": "ID must be 24 characters long",
+    "any.required": "ID is required",
+  }),
+});
 
-    priority: Joi.string()
-      .valid(
-        "LOW",
-        "MEDIUM",
-        "HIGH"
-      ),
+export const projectIdParamSchema = Joi.object({
+  projectId: objectId.required().messages({
+    "string.hex": "Invalid project ID format",
+    "string.length": "Project ID must be 24 characters long",
+    "any.required": "Project ID is required",
+  }),
+});
 
-    assignedTo: Joi.string()
-      .hex()
-      .length(24)
-      .allow(null),
+export const createTaskSchema = Joi.object({
+  title: Joi.string()
+    .required(),
 
-    projectId: Joi.string()
-      .hex()
-      .length(24)
-      .required(),
-  });
+  description: Joi.string()
+    .allow(""),
 
-export const updateTaskSchema =
-  Joi.object({
-    title: Joi.string(),
+  priority: Joi.string()
+    .valid("LOW", "MEDIUM", "HIGH"),
 
-    description: Joi.string(),
+  assignedTo: Joi.string()
+    .hex()
+    .length(24)
+    .allow(null),
 
-    status: Joi.string().valid(
-      "TODO",
-      "IN_PROGRESS",
-      "DONE"
-    ),
+  projectId: Joi.string()
+    .hex()
+    .length(24)
+    .required(),
+});
 
-    priority: Joi.string().valid(
-      "LOW",
-      "MEDIUM",
-      "HIGH"
-    ),
+export const updateTaskSchema = Joi.object({
+  title: Joi.string(),
 
-    assignedTo: Joi.string()
-      .hex()
-      .length(24)
-      .allow(null),
-  }).min(1);
+  description: Joi.string(),
+
+  status: Joi.string().valid("TODO", "IN_PROGRESS", "DONE"),
+
+  priority: Joi.string().valid("LOW", "MEDIUM", "HIGH"),
+
+  assignedTo: Joi.string()
+    .hex()
+    .length(24)
+    .allow(null),
+}).min(1);

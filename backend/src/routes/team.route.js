@@ -8,7 +8,10 @@ import {
   getMyTeam,
 } from "../controllers/team.controller.js";
 import validate from "../middlewares/validate.middleware.js";
-import { createTeamSchema } from "../validations/team.validation.js";
+import {
+  createTeamSchema,
+  idParamSchema,
+} from "../validations/team.validation.js";
 
 const router = express.Router();
 
@@ -18,6 +21,6 @@ router.post("/", validate(createTeamSchema), createTeam);
 
 router.get("/my-team",  getMyTeam);
 
-router.get("/:id", getTeamById);
+router.get("/:id", validate({ params: idParamSchema }), getTeamById);
 
 export default router;

@@ -46,6 +46,7 @@ export const getTasksByProject = async (req, res) => {
   try {
     const tasks = await Task.find({
       projectId: req.params.projectId,
+      isDeleted: { $ne: true },
     })
       .populate("assignedTo", "name email")
       .sort("-createdAt");
@@ -121,7 +122,8 @@ export const deleteTask = async (req, res) => {
   try {
     const task = await Task.findByIdAndUpdate(
       req.params.id,
-      { }
+      { isDeleted: true },
+      { new: true }
     );
 
     if (!task) {

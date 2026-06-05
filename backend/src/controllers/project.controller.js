@@ -40,6 +40,7 @@ export const getProjects = async (req, res) => {
 
     const projects = await Project.find({
       teamId: user.teamId,
+      isDeleted: { $ne: true },
     }).sort("-createdAt");
 
     res.json({
