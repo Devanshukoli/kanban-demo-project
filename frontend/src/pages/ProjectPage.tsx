@@ -1,4 +1,4 @@
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 
 import { useQuery } from "@tanstack/react-query";
 
@@ -6,6 +6,8 @@ import { getTasksByProject } from "@/api/task.api";
 
 import CreateTaskForm from "@/components/CreateTaskForm";
 import TaskCard from "@/components/TaskCard";
+import ThemeToggle from "@/components/ThemeToggle";
+import { Button } from "@/components/ui/button";
 
 import {
   Card,
@@ -16,6 +18,7 @@ import {
 
 const ProjectPage = () => {
   const { id } = useParams();
+  const navigate = useNavigate();
 
   const tasksQuery = useQuery({
     queryKey: ["tasks", id],
@@ -58,14 +61,26 @@ const ProjectPage = () => {
 
       {/* Header */}
 
-      <div>
-        <h1 className="text-4xl font-bold">
-          Project Board
-        </h1>
+      <div className="flex items-center justify-between">
+        <div>
+          <h1 className="text-4xl font-bold">
+            Project Board
+          </h1>
 
-        <p className="text-muted-foreground mt-2">
-          Manage and track your tasks
-        </p>
+          <p className="text-muted-foreground mt-2">
+            Manage and track your tasks
+          </p>
+        </div>
+
+        <div className="flex items-center gap-3">
+          <Button
+            variant="outline"
+            onClick={() => navigate("/dashboard")}
+          >
+            Back to Dashboard
+          </Button>
+          <ThemeToggle />
+        </div>
       </div>
 
       {/* Stats */}
